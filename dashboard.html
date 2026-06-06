@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            margin: 15px 0;
+        }
+
+        .sidebar a:hover {
+            color: white;
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background: #ef4444;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .card p {
+            font-size: 24px;
+            margin: 10px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>🚀 My App</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Users</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+    <div class="header">
+        <h2>Dashboard</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <p id="user"></p>
+
+    <!-- Cards -->
+    <div class="cards">
+        <div class="card">
+            <h3>Total Users</h3>
+            <p>120</p>
+        </div>
+
+        <div class="card">
+            <h3>Revenue</h3>
+            <p>₹45,000</p>
+        </div>
+
+        <div class="card">
+            <h3>Orders</h3>
+            <p>320</p>
+        </div>
+
+        <div class="card">
+            <h3>Performance</h3>
+            <p>89%</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+
+<script>
+// Protect dashboard
+auth.onAuthStateChanged(function(user) {
+    if (user) {
+        document.getElementById("user").innerText =
+            "Logged in as: " + user.email;
+
+        // 🔥 Save login record
+        db.collection("logins").add({
+            email: user.email,
+            time: new Date()
+        });
+    } else {
+        window.location.href = "login.html";
+    }
+});
+</script>
+
+</body>
+</html>
+

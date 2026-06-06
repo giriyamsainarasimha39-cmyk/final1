@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #f4f6f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #111827;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>👨‍💼 Admin Panel - User Logins</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Login Time</th>
+        </tr>
+    </thead>
+    <tbody id="data"></tbody>
+</table>
+
+
+
+
+
+
+<h3>📊 Login Analytics</h3>
+<canvas id="loginChart"></canvas>
+
+
+
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="firebase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+
+
+<script>
+<script>
+let loginCounts = {};
+
+// Load data
+function loadData() {
+    db.collection("logins").get()
+    .then(snapshot => {
+
+        let table = document.getElementById("data");
+        table.innerHTML = "";
+
+        snapshot.forEach(doc => {
+            let data = doc.data();
+
+            // Table row
+            let row = `
+                <tr>
+                    <td>${data.email}</td>
+                    <td>${data.time.toDate().toLocaleString()}</td>
+                </tr>
+            `;
+            table.innerHTML += row;
+
+            // 📊 Count logins per user
+            if (loginCounts[data.email]) {
+                loginCounts[data.email]++;
+            } else {
+                loginCounts[data.email] = 1;
+            }
+        });
+
+        // Draw chart
+        drawChart();
+    });
+}
+
+// Chart function
+function drawChart() {
+    let labels = Object.keys(loginCounts);
+    let values = Object.values(loginCounts);
+
+    new Chart(document.getElementById("loginChart"), {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Login Count",
+                data: values
+            }]
+        }
+    });
+}
+</script>
+</script>
+
+</body>
+</html>
