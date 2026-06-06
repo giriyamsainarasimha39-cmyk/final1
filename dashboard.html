@@ -157,7 +157,18 @@ auth.onAuthStateChanged(function(user) {
     }
 });
 </script>
-
+<script>
+// Logout function
+function logout() {
+    auth.signOut()
+    .then(() => {
+        window.location.href = "login.html";
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+</script>
 </body>
 </html>
 
